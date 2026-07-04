@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Mana - Empires & Puzzles</title>
+    <style>
+        /* Stile scuro Antracite e dettagli Giallo Neon (#ffff00) */
+        body {
+            background-color: #1f1f1f;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background-color: #000000;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+        }
+        h1 {
+            font-size: 1.4rem;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #ffffff;
+            border-bottom: 2px solid #ffff00;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            color: #ffff00;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            background-color: #3a3a3a;
+            color: #ffffff;
+            border: 1px solid #555555;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: #ffff00;
+        }
+        .btn-calcola {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            background-color: #ffff00;
+            color: #000000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        .btn-calcola:active {
+            background-color: #cccc00;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            border: 2px dashed #ffff00;
+            border-radius: 5px;
+            text-align: center;
+            background-color: #222222;
+        }
+        .result-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffff00;
+            margin: 0 0 5px 0;
+        }
+        .result-sub {
+            font-size: 0.85rem;
+            color: #aaaaaa;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>E&P CALCOLATORE MANA</h1>
+    
+    <div class="form-group">
+        <label for="velocita">Velocità / Carica Eroe:</label>
+        <select id="velocita">
+            <option value="6500">Molto Rapido (Very Fast)</option>
+            <option value="8000" selected>Rapido (Fast)</option>
+            <option value="10000">Medio (Average)</option>
+            <option value="12000">Lento (Slow)</option>
+            <option value="13500">Molto Lento (Very Slow)</option>
+            <option value="4905">Ninja (Carica x1)</option>
+            <option value="9809">Ninja (Carica x2)</option>
+            <option value="14715">Ninja (Carica x3)</option>
+            <option value="5500">Magia (Carica x1)</option>
+            <option value="12300">Magia (Carica x2)</option>
+            <option value="11000">Slayer (Carica x1)</option>
+            <option value="6000">Stige (Carica x1)</option>
+            <option value="9000">Stige (Carica x2)</option>
+            <option value="12000">Stige (Carica x3)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="nodo">Nodo Emblemi %</label>
+        <input type="number" id="nodo" value="0" min="0" step="1">
+    </div>
+
+    <div class="form-group">
+        <label for="truppa">Bonus Truppa %</label>
+        <input type="number" id="truppa" value="0" min="0" step="1">
+    </div>
+
+    <div class="form-group">
+        <label for="costume">Bonus Costume %</label>
+        <input type="number" id="costume" value="0" min="0" step="1">
+    </div>
+
+    <div class="form-group">
+        <label for="vari">Bonus Vari (Famiglia,Skill,ecc..) %</label>
+        <input type="number" id="vari" value="0" min="0" step="1">
+    </div>
+
+    <div class="form-group">
+        <label for="diretto">Mana Diretto %</label>
+        <input type="number" id="diretto" value="0" min="0" step="1">
+    </div>
+
+    <button class="btn-calcola" onclick="eseguiCalcolo()">CALCOLA TESSERE DI BATTAGLIA</button>
+
+    <div class="result-box">
+        <p class="result-title" id="txt-tessere"> Inserisci i dati e calcola </p>
+        <p class="result-sub" id="txt-confronto">Base senza Bonus --</p>
+    </div>
+</div>
+
+<script>
+function eseguiCalcolo() {
+    // 1. Recupero dei valori dai campi della GUI
+    const puntiBase = parseFloat(document.getElementById('velocita').value);
+    const nodo = parseFloat(document.getElementById('nodo').value) || 0;
+    const truppa = parseFloat(document.getElementById('truppa').value) || 0;
+    const costume = parseFloat(document.getElementById('costume').value) || 0;
+    const vari = parseFloat(document.getElementById('vari').value) || 0;
+    const diretto = parseFloat(document.getElementById('diretto').value) || 0;
+
+    // 2. Logica di calcolo millesimale ("Sempi cucuzza è")
+    const bonusTotale = nodo + truppa + costume + vari;
+    const puntiDaCaricare = puntiBase - (puntiBase * (diretto / 100.0));
+    const valoreTessera = 1000 * (1 + (bonusTotale / 100.0));
+
+    // Arrotondamento per eccesso (Math.ceil)
+    const tessereNecessarie = Math.ceil(puntiDaCaricare / valoreTessera);
+    const tessereBaseSenzaBonus = Math.ceil(puntiBase / 1000.0);
+
+    // 3. Output grafico istantaneo
+    document.getElementById('txt-tessere').innerText = ` TESSERE NECESSARIE: ${tessereNecessarie}`;
+    document.getElementById('txt-confronto').innerText = `Base senza bonus: ${tessereBaseSenzaBonus} tessere (Bonus totale: +${bonusTotale}%)`;
+}
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('Service Worker Registrato con Successo!'))
+      .catch((err) => console.error('Errore registrazione SW:', err));
+  }
+</script>
+</body>
+</html>
