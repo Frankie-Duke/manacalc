@@ -2,7 +2,7 @@
   "short_name": "Mana Calc",
   "name": "E&P Mana Calculator",
   "description": "Calcolatore di mana per Empires & Puzzles",
-  "start_url": "./E&P Mana Calculator.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#000000",
