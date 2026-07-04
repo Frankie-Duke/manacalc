@@ -100,7 +100,7 @@
     <h1>E&P CALCOLATORE MANA</h1>
     
     <div class="form-group">
-        <label for="velocita">Velocit‡ / Carica Eroe:</label>
+        <label for="velocita">Velocit√† / Carica Eroe:</label>
         <select id="velocita">
             <option value="6500">Molto Rapido (Very Fast)</option>
             <option value="8000" selected>Rapido (Fast)</option>
@@ -116,7 +116,7 @@
             <option value="6000">Stige (Carica x1)</option>
             <option value="9000">Stige (Carica x2)</option>
             <option value="12000">Stige (Carica x3)</option>
-        </select>
+        </select> 
     </div>
 
     <div class="form-group">
@@ -162,7 +162,7 @@ function eseguiCalcolo() {
     const vari = parseFloat(document.getElementById('vari').value) || 0;
     const diretto = parseFloat(document.getElementById('diretto').value) || 0;
 
-    // 2. Logica di calcolo millesimale ("Sempi cucuzza Ë")
+    // 2. Logica di calcolo millesimale ("Sempi cucuzza √®")
     const bonusTotale = nodo + truppa + costume + vari;
     const puntiDaCaricare = puntiBase - (puntiBase * (diretto / 100.0));
     const valoreTessera = 1000 * (1 + (bonusTotale / 100.0));
